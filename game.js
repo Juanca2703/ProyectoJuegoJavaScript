@@ -14,6 +14,11 @@ const playerPos = {
   y: undefined,
 }
 
+const gifPosition = {
+  x: undefined,
+  y: undefined,
+}
+
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
@@ -64,10 +69,21 @@ function startGame (){
     }); 
 
     movePlayer();
+    console.log(playerPos);
     
     }
 
     function movePlayer() {
+
+      const gifCollisionX = playerPos.x.toFixed(3) == gifPosition.x.toFixed(3);
+      const gifCollisionY = playerPos.y.toFixed(3) == gifPosition.y.toFixed(3);
+      const gifCollision = gifCollisionX && gifCollisionY;
+
+      if (gifCollision){
+        console.log('pasaste de nivel!')
+      }
+
+
       game.fillText(emojis["PLAYER"], playerPos.x, playerPos.y);
     }
 
@@ -86,21 +102,29 @@ function moveBykeys(event){
   
 }
 
+function mapColision () {
+  
+}
+
 function moveUp(){
-  playerPos.y -= elementsSize;
+  if (playerPos.y - elementsSize < elementsSize) console.log('out');
+   else playerPos.y -= elementsSize;
   startGame();
 }
 
 function moveDown(){
-  playerPos.y += elementsSize;
+  if (playerPos.y + elementsSize > canvasSize) console.log('out');
+  else playerPos.y += elementsSize;
   startGame();
 }
 function moveLeft(){
-  playerPos.x -= elementsSize;
+  if (playerPos.x - elementsSize < elementsSize) console.log('out');
+  else playerPos.x -= elementsSize;
   startGame();
 }
 function moveRight(){
-  playerPos.x += elementsSize;
+  if (playerPos.x + elementsSize > canvasSize) console.log('out');
+  else playerPos.x += elementsSize;
   startGame();
 }
   
