@@ -6,6 +6,8 @@ const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
 const spanLives = document.querySelector('#lives');
 const spanTime = document.querySelector('#time');
+const spanRecord = document.querySelector('#record');
+const pResult = document.querySelector('#result');
 
 
 let canvasSize;
@@ -34,16 +36,19 @@ window.addEventListener('resize', setCanvasSize);
 
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8;
+    canvasSize = window.innerWidth * 0.7;
   } else {
-    canvasSize = window.innerHeight * 0.8;
+    canvasSize = window.innerHeight * 0.7;
   }
+
   
   canvas.setAttribute('width', canvasSize);
   canvas.setAttribute('height', canvasSize);
   
   elementsSize = canvasSize / 10;
 
+  playerPos.x = undefined;
+  playerPos.y = undefined;
   startGame();
 }
 
@@ -63,6 +68,7 @@ function startGame (){
     if (!timeStart){
       timeStart = Date.now();
       timeInterval = setInterval(showTime, 100);
+      showRecord();
     }
 
     const mapRow = map.trim().split("\n"); 
@@ -153,6 +159,22 @@ function levelFail() {
 
 function gameWin() {
   console.log('¡Terminaste el juego!');
+
+  const playerTime = spanTime.innerHTML = Date.now() - timeStart;
+  const recordTime = localStorage.getItem('record_time')
+
+  if (recordTime) {
+    if(recordTime >= playerTime) {
+      localStorage.setItem('record_time', playerTime);
+      pResult.innerHTML = 'SUPERASTE EL RECORD!';
+    } else {
+      pResult.innerHTML = 'Lo siento, no superaste el Record :(';
+    }
+  } else {
+    localStorage.setItem('record_time', playerTime);
+    pResult.innerHTML = 'Primer vez? Muy bien!, ahora supera tu record si puedes ;D';
+  }
+
   clearInterval(timeInterval);
 }
 
@@ -164,6 +186,10 @@ function showLives() {
 }
 function showTime(){
   spanTime.innerHTML = Date.now() - timeStart;
+}
+
+function showRecord() {
+  spanRecord.innerHTML = localStorage.getItem('record_time');
 }
 
 window.addEventListener("keydown", moveBykeys)
